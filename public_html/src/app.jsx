@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
 //include other panels
 import PageNotFound from './pages/page_not_found.jsx';
+import PageMusic from './pages/page_music.jsx';
 
 import FooterPanel from './panels/footer_panel.jsx';
 
@@ -14,9 +15,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <div class='page'>
+      <div className='page'>
         <BrowserRouter>
           <Switch>
+            <Route exact path='/' component={PageMusic} />
             <Route path='*' component={PageNotFound} />
           </Switch>
         </BrowserRouter>

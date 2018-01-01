@@ -18,6 +18,17 @@ app.get('/', (req, res) => {
 app.use('/app.bundle.js', express.static(workingDir + '/app.bundle.js'));
 app.use('/styles', express.static(workingDir + '/styles'));
 
+//socket system
+io.sockets.on('connect', (client) => {
+  console.log('a client connected');
+
+  client.on('disconnect', () => {
+    console.log('a client disconnected');
+  })
+
+  //TODO: MORE
+});
+
 //start listening
 http.listen(3001, () => {
   console.log('listening to *:3001');
