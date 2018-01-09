@@ -16,6 +16,7 @@ body {
 footer {
   flex: 0 1 auto;
   justify-self: flex-end;
+  align-self: center;
   padding-top: 2em;
   display: flex;
   flex-direction: row;
@@ -24,9 +25,11 @@ footer {
 }
 
 .page {
-  flex: 1;
+  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
+}
+
+.selector {
+  flex: 0 1 auto;
 }

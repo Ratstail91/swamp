@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import * as socketeer from '../socketeer';
+import JukeboxSelectorPanel from '../panels/jukebox_selector_panel.jsx';
+import SongSelectorPanel from '../panels/song_selector_panel.jsx';
 
 class PageMusic extends React.Component {
   constructor(props) {
@@ -13,7 +14,8 @@ class PageMusic extends React.Component {
   render() {
     return (
       <div className='page'>
-        <h1>Music</h1>
+        <JukeboxSelectorPanel />
+        <SongSelectorPanel />
       </div>
     );
   };
