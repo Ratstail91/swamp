@@ -1,4 +1,4 @@
-import { NEW_JUKEBOX, SET_JUKEBOX, newJukebox, setJukebox } from '../actions/jukebox_actions.js';
+import { NEW_JUKEBOX, SET_JUKEBOX } from '../actions/jukebox_actions.js';
 
 var initialStore = {
 	jukebox: '',
