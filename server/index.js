@@ -3,20 +3,23 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 
-var formidable = require('formidable');
+var formidable = require('express-formidable');
 var fs = require('fs');
 var io = require('socket.io')(http);
 var path = require('path');
 
+//access the static files and folders
 var workingDir = path.resolve(__dirname + '/../public_html');
 
-//access the static files and folders
 app.get('/', (req, res) => {
   res.sendFile(workingDir + '/index.html');
 });
 
 app.use('/app.bundle.js', express.static(workingDir + '/app.bundle.js'));
 app.use('/styles', express.static(workingDir + '/styles'));
+
+//middleware
+app.use(formidable());
 
 //socket system
 io.sockets.on('connect', (client) => {
