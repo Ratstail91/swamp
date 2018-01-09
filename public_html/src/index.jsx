@@ -5,20 +5,25 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 
 import App from './app.jsx';
-import reducer from './reducers/reducers';
+import jukeboxReducer from './reducers/jukebox_reducer.js';
+import DevTools from './dev_tools.jsx';
 
 //store
 var store = createStore(
-  reducer,
+  jukeboxReducer,
   compose(
-    applyMiddleware(thunk)
+    applyMiddleware(thunk),
+    DevTools.instrument()
   )
 );
 
 //render
 ReactDOM.render(
   <Provider store={store}>
-    <App />
+    <div className='page'>
+      <App />
+      <DevTools />
+    </div>
   </Provider>,
   document.querySelector('#root')
 );

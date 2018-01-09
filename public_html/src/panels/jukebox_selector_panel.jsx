@@ -1,35 +1,12 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Dropdown } from 'semantic-ui-react';
+import { newJukebox, setJukebox } from '../actions/jukebox_actions.js';
 
 class JukeboxSelectorPanel extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      value: '',
-      options: [
-        {
-          key: 'Kingdom Hearts',
-          value: 'Kingdom Hearts',
-          text: 'Kingdom Hearts'
-        },
-        {
-          key: 'Cast World',
-          value: 'Cast World',
-          text: 'Cast World'
-        },
-        {
-          key: 'Made in Abyss',
-          value: 'Made in Abyss',
-          text: 'Made in Abyss'
-        },
-        {
-          key: 'New',
-          value: 'new',
-          text: 'New Jukebox',
-          icon: 'add'
-        }
-      ]
-    }
   }
 
   myChange(event, data) {
@@ -42,27 +19,12 @@ class JukeboxSelectorPanel extends React.Component {
         return;
       }
 
-      //append the new name to the list
-      var tmpOptions = JSON.parse(JSON.stringify(this.state.options));
-      tmpOptions.unshift({
-        key: name,
-        value: name,
-        text: name
-      });
-      this.setState({
-        options: tmpOptions
-      });
-
-      //point to the new name
-      this.setState({
-        value: name
-      });
+      //create and set the new jukebox
+      this.props.newJukebox(name);
     }
     else {
-      //point to the selection
-      this.setState({
-        value: data.value
-      });
+      //set an old jukebox
+      this.props.setJukebox(data.value);
     }
   }
 
@@ -73,11 +35,33 @@ class JukeboxSelectorPanel extends React.Component {
         placeholder='Select Jukebox'
         search
         selection
-        options={this.state.options}
-        value={this.state.value}
+        selectOnBlur={false}
+        options={this.props.jukeboxOptions}
+        value={this.props.jukebox}
       />
     );
   };
 }
+
+JukeboxSelectorPanel.propTypes = {
+  jukebox: PropTypes.string.isRequired,
+  jukeboxOptions: PropTypes.array.isRequired
+};
+
+function mapStoreToProps(store) {
+  return {
+    jukebox: store.jukebox,
+    jukeboxOptions: store.jukeboxOptions
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    newJukebox: (value) => { dispatch(newJukebox(value)); },
+    setJukebox: (value) => { dispatch(setJukebox(value)); }
+  };
+}
+
+JukeboxSelectorPanel = connect(mapStoreToProps, mapDispatchToProps)(JukeboxSelectorPanel);
 
 export default JukeboxSelectorPanel;
