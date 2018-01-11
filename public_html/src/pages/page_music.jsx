@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Header } from 'semantic-ui-react';
+import io from 'socket.io-client';
 import JukeboxSelectorPanel from '../panels/jukebox_selector_panel.jsx';
 import SongSelectorPanel from '../panels/song_selector_panel.jsx';
 import * as jukeboxActions from '../actions/jukebox_actions.js';
@@ -9,7 +10,29 @@ import * as jukeboxActions from '../actions/jukebox_actions.js';
 class PageMusic extends React.Component {
   constructor(props) {
     super(props);
-    //TODO: request the jukebox list
+    this.state = {
+      socket: io.connect('swamp.krgamestudios.com:3001')
+    };
+
+    //jukebox list handler
+    this.state.socket.on('jukebox list', (msg) => {
+      var rooms = JSON.parse(msg);
+
+      this.props.clearJukeboxList();
+
+      for (var room in rooms) {
+        this.props.newJukebox(rooms[room]);
+      }
+    });
+
+    //jukebox room handler
+    this.state.socket.on('jukebox join', (msg) => {
+      this.props.setJukebox(msg);
+    });
+
+    //request the jukebox list
+    this.state.socket.emit('jukebox list');
+    this.state.socket.emit('jukebox join which');
   };
 
   componentWillReceiveProps(nextProps) {
@@ -22,7 +45,6 @@ class PageMusic extends React.Component {
       //TODO: send the delete jukebox info to the server
       this.props.clearUnmakeJukebox();
     }
-
     if (this.props.jukebox !== nextProps.jukebox) {
       //TODO: update song list
     }

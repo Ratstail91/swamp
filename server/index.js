@@ -21,13 +21,46 @@ app.use('/styles', express.static(workingDir + '/styles'));
 //middleware
 app.use(formidable());
 
+//utility functions
+function findRooms() {
+  var availableRooms = [];
+  var rooms = io.sockets.adapter.rooms;
+  if (rooms) {
+    for (var room in rooms) {
+      if (!rooms[room].hasOwnProperty(room)) {
+        availableRooms.push(room);
+      }
+    }
+  }
+  return availableRooms;
+};
+
+var defaultRoom = 'default';
+
 //socket system
-io.sockets.on('connect', (client) => {
+io.sockets.on('connection', (client) => {
   console.log('a client connected');
 
+  //join room
+  client.join(defaultRoom);
+
+  //callbacks
   client.on('disconnect', () => {
     console.log('a client disconnected');
   })
+
+  client.on('jukebox list', (msg) => {
+    var rooms = findRooms();
+    client.emit('jukebox list', JSON.stringify(rooms));
+  });
+
+  client.on('jukebox join', (msg) => {
+    client.join(msg);
+  });
+
+  client.on('jukebox join which', () => {
+    client.emit('jukebox join', client.rooms[1]);
+  });
 
   //TODO: MORE
 });
