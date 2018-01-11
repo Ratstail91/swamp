@@ -44,9 +44,17 @@ io.sockets.on('connection', (client) => {
   //join room
   client.join(defaultRoom);
 
+  //debug
+  var rooms = findRooms();
+  io.sockets.emit('jukebox list', JSON.stringify(rooms));
+
   //callbacks
   client.on('disconnect', () => {
     console.log('a client disconnected');
+
+    //debug
+    var rooms = findRooms();
+    io.sockets.emit('jukebox list', JSON.stringify(rooms));
   })
 
   client.on('jukebox list', (msg) => {
